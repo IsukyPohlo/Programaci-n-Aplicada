@@ -1,2 +1,2 @@
-# Programaci-n-Aplicada
+# Programacion Aplicada
 Archivos de Programacion Aplicada (progra 2)
