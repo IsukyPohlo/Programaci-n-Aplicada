@@ -1,0 +1,323 @@
+#include <stdlib.h>
+#include <gtk/gtk.h>
+#include <gdk/gdk.h>
+#include <string.h>
+#include "strct.h"
+
+extern void click (GtkWidget *widget, gpointer info);
+extern void entered (GtkWidget *widget, gpointer info);
+extern void leaved (GtkWidget *widget, gpointer info);
+extern void salir (GtkWidget *widget, gpointer info);
+
+void tabtab (GtkWidget *widget, gpointer info);
+
+void tabtab (GtkWidget *widget, gpointer info){
+
+	GtkWidget *ventana, *vbox, *imagen, *stat, *bg[2], *ibg[2];
+
+	VENT *prev = (VENT *) info;
+
+	DATA *dat;
+
+	int i, j, p;
+
+	GdkColor color,color1,color2,tab1,tab2;
+
+	const gchar *skins[2][2][13], *splash[5][2][6][13], *name[3];
+
+	int ta[9][9] =	{	{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+				{ 0 , 0 ,-4 , 0 ,-3 , 0 ,-2 , 0 ,-1 },
+				{ 0 ,-8 , 0 ,-7 , 0 ,-6 , 0 ,-5 , 0 },
+				{ 0 , 0 ,-12, 0 ,-11, 0 ,-10, 0 ,-9 },
+				{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+				{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+				{ 0 , 9 , 0 , 10, 0 , 11, 0 , 12, 0 },
+				{ 0 , 0 , 5 , 0 , 6 , 0 , 7 , 0 , 8 },
+				{ 0 , 1 , 0 , 2 , 0 , 3 , 0 , 4 , 0 }
+			};
+
+	//Nombres de archivo para skins
+
+	i=1;	
+	skins[0][0][i] = "skins/1/ficha_a_-1.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-2.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-3.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-4.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-5.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-6.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-7.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-8.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-9.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-10.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-11.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-12.png";i++;
+	skins[0][0][i] = "skins/1/ficha_a_-13.png";i++;
+
+	
+	splash[0][0][0][0] = "skins/1/empt.png";
+	for (i=1;i<=13;i++){
+		splash[0][0][0][i] = "skins/1/idle_-0.png";i++;
+		splash[0][0][1][i] = "skins/1/mov_-0.png";i++;
+		splash[0][0][2][i] = "skins/1/off_-0.png";i++;
+		splash[0][0][3][i] = "skins/1/att_-0.png";i++;
+		splash[0][0][4][i] = "skins/1/def_-0.png";i++;
+	}
+
+	i=1;
+	skins[0][1][i] = "skins/1/ficha_a_1.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_2.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_3.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_4.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_5.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_6.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_7.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_8.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_9.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_10.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_11.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_12.png";i++;
+	skins[0][1][i] = "skins/1/ficha_a_13.png";i++;
+
+
+	splash[0][1][0][0] = "skins/1/empt.png";
+	for (i=1;i<=13;i++){
+		splash[0][1][0][i] = "skins/1/idle_0.png";
+		splash[0][1][1][i] = "skins/1/mov_0.png";
+		splash[0][1][2][i] = "skins/1/off_0.png";
+		splash[0][1][3][i] = "skins/1/att_0.png";
+		splash[0][1][4][i] = "skins/1/def_0.png";
+	}
+	
+
+	p=0;
+
+	//-------- Estructuras
+		
+	dat = malloc (sizeof (DATA));
+
+	//-------- inicializacion variables
+	dat->turn = 0;
+	
+	
+
+	for (i=0;i<=8;i++){
+		for (j=0;j<=8;j++){
+			dat->t[i][j] = ta[i][j];
+		}
+	}
+
+	
+	/*dat->turn = 0;
+
+	dat->t[0] ={ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 };
+	dat->t[1] ={ 0 , 0 ,-4 , 0 ,-3 , 0 ,-2 , 0 ,-1 };
+	dat->t[2] ={ 0 ,-8 , 0 ,-7 , 0 ,-6 , 0 ,-5 , 0 };
+	dat->t[3] ={ 0 , 0 ,-12, 0 ,-11, 0 ,-10, 0 ,-9 };
+	dat->t[4] ={ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 };
+	dat->t[5] ={ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 };
+	dat->t[6] ={ 0 , 9 , 0 , 10, 0 , 11, 0 , 12, 0 };
+	dat->t[7] ={ 0 , 0 , 5 , 0 , 6 , 0 , 7 , 0 , 8 };
+	dat->t[8] ={ 0 , 1 , 0 , 2 , 0 , 3 , 0 , 4 , 0 };
+	*/
+
+	//-------  2  ----------
+		// a
+	
+	ventana = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+	vbox = gtk_vbox_new (FALSE, 5);
+
+	dat->tab = gtk_table_new (16, 16, TRUE);
+
+	for (i=1;i<=8;i++){
+		for (j=1;j<=8;j++){
+			dat->e[i][j] = gtk_event_box_new();
+			dat->b[i][j] = gtk_button_new();
+		}
+	}
+
+	bg[0] = gtk_event_box_new();
+	bg[1] = gtk_event_box_new();
+
+		// b  propiedades uwu
+	
+	gtk_window_set_title(GTK_WINDOW(ventana), "Tablero");
+	for (i=1;i<=8;i++){
+		for (j=1;j<=8;j++){
+
+			switch (i){
+			case 1:
+				strcpy ((char *)name,"1");
+			break;
+			case 2:
+				strcpy ((char *)name,"2");
+			break;
+			case 3:
+				strcpy ((char *)name,"3");
+			break;
+			case 4:
+				strcpy ((char *)name,"4");
+			break;
+			case 5:
+				strcpy ((char *)name,"5");
+			break;
+			case 6:
+				strcpy ((char *)name,"6");
+			break;
+			case 7:
+				strcpy ((char *)name,"7");
+			break;
+			case 8:
+				strcpy ((char *)name,"8");
+			break;
+			}
+			
+			switch (j){
+			case 1:
+				strcat ((char *)name,"1");
+			break;
+			case 2:
+				strcat ((char *)name,"2");
+			break;
+			case 3:
+				strcat ((char *)name,"3");
+			break;
+			case 4:
+				strcat ((char *)name,"4");
+			break;
+			case 5:
+				strcat ((char *)name,"5");
+			break;
+			case 6:
+				strcat ((char *)name,"6");
+			break;
+			case 7:
+				strcat ((char *)name,"7");
+			break;
+			case 8:
+				strcat ((char *)name,"8");
+			break;
+			}
+
+			gtk_widget_set_name (dat->b[i][j],(char *)name);
+		}
+	}
+
+	
+
+   	gdk_color_parse ("red", &color);
+	gdk_color_parse ("blue", &color1);
+	gdk_color_parse ("black", &color2);
+
+	gdk_color_parse ("#2E2EFE", &tab1);
+	gdk_color_parse ("#819FF7", &tab2);
+
+    	
+	for (i=1;i<=8;i++){
+		for (j=1;j<=8;j++){
+			if (  ( (i+j)%2 ) == 1)
+				gtk_widget_modify_bg (GTK_WIDGET(dat->e[i][j]), GTK_STATE_NORMAL, &tab1);
+			else{
+				gtk_widget_set_sensitive (dat->b[i][j], FALSE);
+				gtk_widget_modify_bg (GTK_WIDGET(dat->e[i][j]), GTK_STATE_NORMAL, &tab2);
+			}
+		}
+	}	
+	
+	gtk_widget_modify_bg (GTK_WIDGET(dat->b[2][1]), GTK_STATE_PRELIGHT, &color);
+	gtk_widget_modify_bg (GTK_WIDGET(dat->b[2][1]), GTK_STATE_SELECTED, &color2);
+
+
+	for (i=1;i<=8;i++){
+		for (j=1;j<=8;j++){
+			gtk_button_set_relief (GTK_BUTTON(dat->b[i][j]),  GTK_RELIEF_NONE);
+		}
+	}
+	
+	gtk_widget_modify_bg (GTK_WIDGET(bg[0]), GTK_STATE_NORMAL, &tab2);
+	gtk_widget_modify_bg (GTK_WIDGET(bg[1]), GTK_STATE_NORMAL, &tab1);
+
+		//imagenes
+	imagen = gtk_image_new_from_file ("favicon.gif");	
+
+	for (i=1;i<=13;i++){
+		dat->piece[0][i] = gtk_image_new_from_file (skins[0][0][i]);
+		dat->piece[1][i] = gtk_image_new_from_file (skins[0][1][i]);
+	}
+
+	for (i=1;i<=13;i++){
+		dat->blank[0][i] = gtk_image_new_from_file ("skins/1/empt.png");
+		dat->blank[1][i] = gtk_image_new_from_file ("skins/1/empt.png");
+	}
+
+
+	ibg[0] = gtk_image_new_from_file ( splash[0][0][0][1] );
+	ibg[1] = gtk_image_new_from_file ( splash[0][1][0][1] );
+
+	for (i=1;i<=8;i++){
+		for (j=1;j<=8;j++){
+			if (dat->t[i][j] > 0){
+				gtk_button_set_image(GTK_BUTTON(dat->b[i][j]),dat->piece[1][ dat->t[i][j] ]);
+			}
+			else if (dat->t[i][j] < 0){
+				gtk_button_set_image(GTK_BUTTON(dat->b[i][j]),dat->piece[0][ (dat->t[i][j])*(-1) ]);
+			}
+			
+		}
+	}	
+
+	gtk_button_set_image(GTK_BUTTON(dat->b[1][1]), imagen);
+	
+
+	//-------  3  señales :o ----------
+
+	g_signal_connect(G_OBJECT(ventana), "destroy", G_CALLBACK(salir),NULL);
+	
+	for (i=1;i<=8;i++){
+		for (j=1;j<=8;j++){
+			g_signal_connect(G_OBJECT(dat->b[i][j]), "clicked",G_CALLBACK(click), dat);
+			g_signal_connect(G_OBJECT(dat->b[i][j]), "enter",G_CALLBACK(entered), NULL);
+			g_signal_connect(G_OBJECT(dat->b[i][j]), "leave",G_CALLBACK(leaved), NULL);
+		}
+	}
+
+
+
+	//-------- [4] contenedores ------------
+
+	for (j=1;j<=8;j++){
+		for (i=1;i<=8;i++){
+			gtk_container_add ( GTK_CONTAINER(dat->e[i][j]), dat->b[i][j]);
+		}
+	}
+
+	gtk_container_add ( GTK_CONTAINER(bg[0]), ibg[0]);
+	gtk_container_add ( GTK_CONTAINER(bg[1]), ibg[1]);
+	
+	//TABLE
+	
+	for (j=1;j<=8;j++){
+		for (i=1;i<=8;i++){
+			gtk_table_attach_defaults ( GTK_TABLE (dat->tab), dat->e[i][j], 4+j-1, 4+j, 3+i-1, 3+i);
+		}
+	}
+
+	gtk_table_attach_defaults ( GTK_TABLE (dat->tab), bg[0], 0, 4, 5, 9);
+	gtk_table_attach_defaults ( GTK_TABLE (dat->tab), bg[1],12,16, 5, 9);
+	
+	gtk_box_pack_start_defaults (GTK_BOX(vbox), dat->tab);
+
+	gtk_container_add(GTK_CONTAINER(ventana),vbox);
+
+	// 5
+	
+
+	gtk_widget_hide_all(prev->venta);
+	gtk_widget_show_all(ventana);
+
+	// 6
+	
+	//gtk_main();
+	
+}
+

@@ -1,0 +1,23 @@
+typedef struct datas{
+	GtkWidget *entrada;
+}ENTRY;
+
+typedef struct data{
+	GtkWidget *barra;
+	guint ID;
+}BARRA;
+
+typedef struct wind{
+	GtkWidget *venta;
+}VENT;
+
+typedef struct dat{
+	int turn;
+	int t[9][9];
+	GtkWidget *b[9][9];
+	GtkWidget *e[9][9];
+	GtkWidget *piece[2][14];
+	GtkWidget *blank[2][14];
+}DATA;
+
+	
